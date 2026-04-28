@@ -2,6 +2,9 @@
 
 An interactive React + Vite climate-policy simulator that turns the United States map into a live decision surface. Users can compare geoengineering interventions against sustainability strategies, move a 20-year timeline slider, and watch environmental, health, and economic indicators change in real time.
 
+Live Demo: https://climate-strategy-hub.vercel.app/
+Repository: https://github.com/maizywilcox-source/Climate_strategy_Hub
+
 ![Climate Strategy Hub preview](./src/assets/hero.png)
 
 ## What This App Does
@@ -157,11 +160,18 @@ If you are reviewing this project, the fastest way to evaluate it is:
 
 This repository includes an `.npmrc` file so `npm install` works cleanly despite a peer-dependency mismatch between React 19 and `react-simple-maps`.
 
-## Next Step After Deployment
+## Privacy And Security Notes
 
-After you publish the app, update this section with your live URL:
+- No API keys, passwords, `.env` files, or private backend credentials are required for this project.
+- This app is a frontend-only static deployment, so the website itself is safe to keep public.
+- If you want the source code repository to be less visible, you can make the GitHub repository private later and keep the Vercel site public.
+- Important: any public frontend website still sends JavaScript, images, and client-side logic to the browser, so visitors can inspect shipped frontend code. Public website access and fully private frontend code cannot both be guaranteed at the same time.
+- Because of that, never place secrets in React source files, browser code, or public assets.
 
-```text
-Live Demo: https://your-project-name.vercel.app
-Repository: https://github.com/your-username/your-repo-name
-```
+## Submission Status
+
+- Public live URL is available
+- GitHub repository is available
+- No setup is required for reviewers
+- Local install, build, and lint instructions are documented
+- No database, login, or environment configuration is required

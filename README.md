@@ -1,88 +1,72 @@
 # Climate Strategy Hub
 
-An interactive React + Vite climate-policy simulator that turns the United States map into a live decision surface. Users can compare geoengineering interventions against sustainability strategies, move a 20-year timeline slider, and watch environmental, health, and economic indicators change in real time.
+Climate Strategy Hub is an interactive React application that turns climate policy into something visual, explorable, and easier to understand. Instead of reading a static report, users can work through a live U.S. map, test different environmental choices, and watch how those decisions change pollution, temperature, biodiversity, healthcare costs, and economic outcomes over time.
 
-Live Demo: https://climate-strategy-hub.vercel.app/
+**Live Demo: https://climate-strategy-hub.vercel.app/**
 Repository: https://github.com/maizywilcox-source/Climate_strategy_Hub
 
 ![Climate Strategy Hub preview](./src/assets/hero.png)
 
-## What It Is
+## Project Summary
 
-Climate Strategy Hub is an educational climate-policy simulation focused on the United States. It helps users explore how different environmental decisions can affect pollution, temperature, healthcare costs, biodiversity, and long-term sustainability over a 20-year period.
+This project is a climate-policy simulator focused on the United States. It was designed to help people see that supporting the environment and investing in long-term solutions can also improve economic stability, public health, and quality of life. The app uses an interactive map, scenario controls, and a 20-year timeline to show how environmental choices can create very different futures.
 
-Instead of presenting climate data as a static report, the project turns those ideas into a visual and interactive map experience. Users can toggle strategies, compare tradeoffs, and hover over map features to understand what each policy or risk means.
+I wanted to make something that felt informative without being dry. A lot of climate conversations are important, but they can also feel distant, overly technical, or discouraging. This app was built to make those ideas more approachable through movement, comparison, and visual storytelling so that a general audience could better understand how climate decisions affect everyday life.
+
+## What The App Does
+
+Climate Strategy Hub lets users explore tradeoffs between short-term interventions and long-term sustainability strategies. It focuses on how different policies influence the environment, but also how those same decisions connect to jobs, health, transportation, and local quality of life.
+
+Inside the app, users can:
+
+- toggle sustainability strategies such as reforestation, biodiversity corridors, circular economy systems, and high-speed rail
+- experiment with geoengineering-related interventions and compare their risks
+- move a timeline slider across a 20-year window to see how effects build over time
+- hover over map features to read short explanations, tradeoffs, and source-backed notes
+- export the current scenario as a PDF policy brief
+
+The goal is not to predict the exact future with perfect certainty. The goal is to help users understand patterns: long-term investment in sustainable systems can reduce harm, support healthier communities, and create benefits that extend beyond the environment alone.
 
 ## Why I Built It
 
-I built this project to make climate strategy easier to understand for people who are not climate scientists or policy experts. Climate change discussions often feel abstract, technical, or disconnected from daily life. I wanted to create something more visual and immediate so a user could see how choices in transportation, land use, waste systems, biodiversity, and geoengineering might shape the future.
+I made this project because I wanted people to better understand that environmental progress and economic well-being do not have to be in conflict. A lot of public discussion treats climate action like a sacrifice, when in many cases long-term investment can improve public health, reduce costs, and support more resilient communities.
 
-I was especially interested in combining environmental storytelling with interactive technology. The goal was not just to display information, but to help users learn through exploration and comparison.
+I also wanted to present this topic in a way that feels engaging rather than intimidating. That is why the app leans so heavily on animated map features, visual feedback, hover interactions, and a timeline-based simulation. My intention was to build something the general public could actually enjoy using while still learning something meaningful from it.
 
 ## How I Built It
 
-I built the app as a React and TypeScript project using Vite for development and deployment. The U.S. visualization is rendered with `react-simple-maps` and `d3-geo`, while the forecasting and scenario logic are managed through a shared React state layer in `gameState.tsx`.
+The application was built with React, TypeScript, and Vite. The main map experience is rendered with `react-simple-maps` and `d3-geo`, while the simulation logic is centralized in `gameState.tsx` so the controls, visuals, and dashboard metrics all react to the same live scenario state.
 
-The app combines several layers:
+Some of the most important technical pieces are:
 
-- a map engine that colors states based on environmental conditions
-- SVG and CSS-based animations for roads, rail, waste systems, forests, biodiversity corridors, and flight paths
-- a 20-year timeline slider that updates modeled impacts over time
-- interactive popups that explain map features, tradeoffs, and supporting data
-- a dashboard and export tool that turn the simulation into a policy-style presentation
+- dynamic state coloring based on environmental conditions
+- SVG and CSS-driven overlays for highways, rail, landfill systems, reforestation, wildlife corridors, and flight paths
+- a 20-year forecast engine that updates pollution, temperature, healthcare, biodiversity, and economic indicators
+- interactive hover popups that explain visuals with pros, cons, and supporting notes
+- PDF export functionality for turning a live scenario into a shareable summary
 
-I also used public environmental and climate references from organizations like NOAA, EPA, IPCC, CMS, FRA, USFWS, and USGS so the educational content and model assumptions were grounded in real-world source material.
+I grounded the educational notes and model assumptions in public sources such as NOAA, EPA, IPCC, CMS, FRA, USFWS, and USGS so the simulation would feel more thoughtful and credible rather than purely decorative.
 
-## How This Project Meets The Criteria
+## Why This Project Works
 
-### Clarity
+This project was designed to be clear, useful, and visually memorable. Rather than separating environmental data from economic or health outcomes, it shows how those systems are connected. The interactive design also makes it easier for a reviewer to immediately understand the idea without needing setup or a long explanation first.
 
-The project is designed so a reviewer can quickly understand both the problem and the solution. The interface shows environmental choices directly on the U.S. map, and the README explains the app’s purpose, setup, and live deployment clearly.
+It is meant to be both educational and accessible:
 
-### Usefulness
+- the live version opens instantly in the browser
+- the interface responds in real time
+- the visuals help communicate differences between choices quickly
+- the project is documented for anyone who wants to understand or run it locally
 
-This project is useful as an educational tool for helping people understand tradeoffs in climate policy. It translates difficult topics such as pollution exposure, reforestation, biodiversity loss, and geoengineering risk into a format that is easier to explore and discuss.
+## Reviewer Notes
 
-### Creativity
+For a quick review, the best path is:
 
-The project combines data storytelling, climate-policy simulation, and animated geographic interaction in a way that is more immersive than a standard dashboard. The use of policy toggles, timeline-based changes, and visual environmental scenarios gives the app a distinct identity.
-
-### Execution
-
-The app is fully deployed, interactive, and usable without setup. It includes a working live URL, GitHub repository, build process, linting, and a functioning interface that responds to user inputs in real time.
-
-### Polish & Thoughtfulness
-
-The project includes hover explanations, visual state changes, a public deployment, documentation, source-backed educational notes, and export functionality. These details were added to make the experience feel complete, understandable, and presentation-ready.
-
-## What This App Does
-
-Climate Strategy Hub models how policy choices ripple across the U.S. through:
-
-- map-based visual storytelling
-- a 20-year forecasting engine
-- environmental and economic KPI dashboards
-- hoverable educational popups tied to visible features on the map
-- exportable policy-brief PDFs
-
-The current experience includes:
-
-- dynamic state coloring based on environmental harm vs sustainability gains
-- animated highway traffic, landfill systems, reforestation zones, biodiversity corridors, and rail overlays
-- geoengineering flight paths with climate-risk tradeoff callouts
-- scenario controls with accordion explanations and source links
-- data-informed indicators for CO2, air pollutants, healthcare costs, temperature, nighttime heat retention, precipitation stress, and ozone / UV damage
-
-## Why It Stands Out
-
-This is not a static dashboard. It is designed as a portfolio-ready simulation that blends:
-
-- React UI engineering
-- SVG and CSS map animation
-- data storytelling
-- systems thinking around climate policy
-
-The goal is to help viewers immediately understand how different interventions can produce visible tradeoffs over time.
+1. Open the live site.
+2. Test the policy toggles and geoengineering controls.
+3. Move the 20-year timeline slider.
+4. Hover over map features to read the educational popups.
+5. Export a scenario as a PDF if you want to see the presentation side of the project.
 
 ## Data Foundations
 
@@ -127,7 +111,7 @@ Source links are surfaced directly inside the UI and scenario explanations.
 
 The fastest way to review or use this project is to open the deployed site:
 
-Live Demo: https://climate-strategy-hub.vercel.app/
+**https://climate-strategy-hub.vercel.app/**
 
 ### Requirements
 
@@ -164,7 +148,7 @@ npm run preview
 
 The project is already publicly deployed, so reviewers do not need to create their own copy to test it.
 
-- Live site: https://climate-strategy-hub.vercel.app/
+- Live site: **https://climate-strategy-hub.vercel.app/**
 - Source code: https://github.com/maizywilcox-source/Climate_strategy_Hub
 - No database is required.
 - No environment variables are required.
@@ -186,16 +170,6 @@ src/
     gameState.tsx
   App.tsx
 ```
-
-## Portfolio / Reviewer Notes
-
-If you are reviewing this project, the fastest way to evaluate it is:
-
-1. Open the live deployment URL.
-2. Toggle sustainability and geoengineering controls.
-3. Move the 20-year timeline slider.
-4. Hover over map features for context, pros, cons, and source-backed notes.
-5. Export the scenario as a PDF policy brief.
 
 ## Known Setup Note
 

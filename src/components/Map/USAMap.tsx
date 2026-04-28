@@ -3,13 +3,12 @@ import { geoAlbersUsa, geoInterpolate, geoPath } from 'd3-geo';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { useGameState } from '../../store/gameState';
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+const geoUrl = new URL('../../assets/us-states-10m.json', import.meta.url).href;
 
 const MAP_WIDTH = 1200;
 const MAP_HEIGHT = 720;
 const MAP_SCALE = 1300;
 const BASE_YEAR = 2026;
-const MAP_STAGE_HEIGHT = 760;
 
 type LonLat = [number, number];
 
@@ -308,6 +307,9 @@ const USAMap: React.FC = () => {
 
   const [hoveredHotspotId, setHoveredHotspotId] = useState<string | null>(null);
   const hoverCloseTimerRef = useRef<number | null>(null);
+  const [viewportWidth, setViewportWidth] = useState(() =>
+    typeof window === 'undefined' ? 1440 : window.innerWidth,
+  );
 
   const clearHoverCloseTimer = () => {
     if (hoverCloseTimerRef.current !== null) {
@@ -330,6 +332,12 @@ const USAMap: React.FC = () => {
   };
 
   useEffect(() => () => clearHoverCloseTimer(), []);
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const totalGeoPlanes = geoMix.so2 + geoMix.alumina + geoMix.silverIodide;
 
@@ -404,6 +412,12 @@ const USAMap: React.FC = () => {
   const geoPollutionOpacity = clamp(totalGeoPlanes / 135, 0, 0.92);
   const deadPlantOpacity = clamp(geoPollutionOpacity * (sustainMix.reforestation ? 0.55 : 1), 0, 0.9);
   const yearLabel = `${BASE_YEAR + timelineYear}`;
+  const isTablet = viewportWidth < 1180;
+  const isPhone = viewportWidth < 640;
+  const mapStageHeight = isPhone ? 560 : isTablet ? 660 : 760;
+  const metricInset = isPhone ? 12 : 24;
+  const metricBadgeMinWidth = isPhone ? 132 : isTablet ? 152 : 172;
+  const timelineStack = isPhone;
   const hotspots: HotspotDefinition[] = [
     {
       id: 'roads',
@@ -664,19 +678,19 @@ const USAMap: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        borderRadius: 26,
-        border: '1px solid rgba(148,163,184,0.35)',
-        background: 'rgba(255,255,255,0.75)',
-        boxShadow: '0 28px 80px rgba(15,23,42,0.22)',
+        borderRadius: isPhone ? 22 : 28,
+        border: '1px solid rgba(125,211,252,0.22)',
+        background: 'rgba(255,255,255,0.78)',
+        boxShadow: '0 34px 90px rgba(15,23,42,0.24)',
       }}
     >
       <div
         style={{
           position: 'relative',
-          height: MAP_STAGE_HEIGHT,
+          height: mapStageHeight,
           overflow: 'hidden',
           background:
-            'linear-gradient(180deg, rgba(219,234,254,1) 0%, rgba(191,219,254,1) 52%, rgba(224,242,254,1) 100%)',
+            'linear-gradient(180deg, rgba(224,242,254,1) 0%, rgba(191,219,254,1) 48%, rgba(224,242,254,1) 100%)',
         }}
       >
       <div
@@ -1339,39 +1353,40 @@ const USAMap: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 20,
+          top: isPhone ? 14 : 20,
           left: '50%',
           transform: 'translateX(-50%)',
-          padding: '12px 18px',
+          padding: isPhone ? '10px 14px' : '12px 18px',
           borderRadius: 999,
-          background: 'rgba(255,255,255,0.76)',
-          border: '1px solid rgba(148,163,184,0.5)',
-          boxShadow: '0 16px 30px rgba(15,23,42,0.12)',
+          background: 'rgba(255,255,255,0.8)',
+          border: '1px solid rgba(125,211,252,0.34)',
+          boxShadow: '0 18px 34px rgba(15,23,42,0.12)',
           backdropFilter: 'blur(10px)',
           textAlign: 'center',
+          minWidth: isPhone ? 148 : 184,
         }}
       >
         <div style={{ fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
           Continental U.S. Scenario
         </div>
-        <div style={{ fontSize: 24, fontWeight: 800, color: '#0f172a' }}>{yearLabel}</div>
+        <div style={{ fontSize: isPhone ? 20 : 24, fontWeight: 800, color: '#0f172a' }}>{yearLabel}</div>
       </div>
 
       {geoPollutionOpacity > 0.14 && (
         <div
           style={{
             position: 'absolute',
-            top: 94,
+            top: isPhone ? 74 : 94,
             left: '50%',
             transform: 'translateX(-50%)',
-            padding: '10px 14px',
+            padding: isPhone ? '9px 12px' : '10px 14px',
             borderRadius: 16,
             background: 'rgba(127,29,29,0.78)',
             border: '1px solid rgba(248,113,113,0.55)',
             color: '#fee2e2',
-            fontSize: 12,
+            fontSize: isPhone ? 11 : 12,
             boxShadow: '0 14px 26px rgba(127,29,29,0.24)',
-            maxWidth: 360,
+            maxWidth: isPhone ? 292 : 360,
             textAlign: 'center',
           }}
         >
@@ -1396,6 +1411,7 @@ const USAMap: React.FC = () => {
               key={hotspot.id}
               hotspot={hotspot}
               point={point}
+              compact={isPhone}
               active={hoveredHotspot?.id === hotspot.id}
               onActivate={() => openHotspot(hotspot.id)}
               onDeactivate={() => closeHotspotSoon(hotspot.id)}
@@ -1407,15 +1423,20 @@ const USAMap: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 152,
-          right: 24,
-          padding: '8px 12px',
+          top: isPhone ? 'auto' : 152,
+          bottom: isPhone ? 104 : 'auto',
+          left: isPhone ? '50%' : 'auto',
+          right: isPhone ? 'auto' : 24,
+          transform: isPhone ? 'translateX(-50%)' : 'none',
+          padding: isPhone ? '7px 10px' : '8px 12px',
           borderRadius: 999,
           background: 'rgba(255,255,255,0.72)',
           border: '1px solid rgba(148,163,184,0.45)',
           color: '#334155',
-          fontSize: 12,
+          fontSize: isPhone ? 11 : 12,
           backdropFilter: 'blur(8px)',
+          maxWidth: isPhone ? 240 : 'none',
+          textAlign: 'center',
         }}
       >
         Hover roads, plants, rail, waste zones, and climate effects for details
@@ -1425,38 +1446,47 @@ const USAMap: React.FC = () => {
         label="Air Pollutants"
         value={`${airPollutantConcentration.toFixed(1)} ug/m3`}
         sublabel="PM2.5-equivalent"
-        style={{ top: 24, left: 24 }}
+        compact={isPhone}
+        minWidth={metricBadgeMinWidth}
+        style={{ top: metricInset, left: metricInset }}
       />
       <MetricBadge
         label="Healthcare Costs"
         value={`$${(healthcareCosts / 1000).toFixed(2)}T`}
         sublabel="CMS-linked growth track"
-        style={{ top: 24, right: 24 }}
+        compact={isPhone}
+        minWidth={metricBadgeMinWidth}
+        style={{ top: metricInset, right: metricInset }}
       />
       <MetricBadge
         label="CO2 Baseline"
         value={`${co2Baseline.toFixed(1)} ppm`}
         sublabel="NOAA atmospheric track"
-        style={{ bottom: 28, left: 24 }}
+        compact={isPhone}
+        minWidth={metricBadgeMinWidth}
+        style={{ bottom: isPhone ? 18 : 28, left: metricInset }}
       />
       <MetricBadge
         label="Temperature"
         value={`+${temperatureAnomaly.toFixed(2)} C`}
         sublabel="Relative to preindustrial"
-        style={{ bottom: 28, right: 24 }}
+        compact={isPhone}
+        minWidth={metricBadgeMinWidth}
+        style={{ bottom: isPhone ? 18 : 28, right: metricInset }}
       />
       </div>
       <div
         style={{
-          padding: '18px 24px 20px',
-          background: 'rgba(248,250,252,0.96)',
+          padding: isPhone ? '16px 16px 18px' : '18px 24px 20px',
+          background: 'rgba(248,250,252,0.98)',
           borderTop: '1px solid rgba(148,163,184,0.4)',
         }}
       >
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
+            flexDirection: timelineStack ? 'column' : 'row',
+            alignItems: timelineStack ? 'flex-start' : 'center',
             justifyContent: 'space-between',
             gap: 20,
             marginBottom: 12,
@@ -1466,11 +1496,11 @@ const USAMap: React.FC = () => {
             <div style={{ fontSize: 12, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
               Timeline Slider
             </div>
-            <div style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>
+            <div style={{ fontSize: isPhone ? 16 : 18, fontWeight: 800, color: '#0f172a' }}>
               Year +{timelineYear} projection
             </div>
           </div>
-          <div style={{ color: '#334155', fontSize: 13 }}>
+          <div style={{ color: '#334155', fontSize: isPhone ? 12 : 13, maxWidth: 360 }}>
             Outside the map view so the U.S. animation stays unobstructed
           </div>
         </div>
@@ -1499,7 +1529,7 @@ const USAMap: React.FC = () => {
             gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
             marginTop: 10,
             color: '#475569',
-            fontSize: 12,
+            fontSize: isPhone ? 11 : 12,
           }}
         >
           {[0, 5, 10, 15, 20].map((year) => (
@@ -1542,12 +1572,14 @@ const USAMap: React.FC = () => {
 const MapHotspot = ({
   hotspot,
   point,
+  compact,
   active,
   onActivate,
   onDeactivate,
 }: {
   hotspot: HotspotDefinition;
   point: [number, number];
+  compact: boolean;
   active: boolean;
   onActivate: () => void;
   onDeactivate: () => void;
@@ -1588,15 +1620,15 @@ const MapHotspot = ({
         type="button"
         aria-label={hotspot.title}
         style={{
-          width: 38,
-          height: 38,
+          width: compact ? 34 : 38,
+          height: compact ? 34 : 38,
           borderRadius: 999,
           border: `2px solid ${hotspot.tone}`,
           background: active ? hotspot.tone : 'rgba(255,255,255,0.84)',
           color: active ? '#ffffff' : hotspot.tone,
           display: 'grid',
           placeItems: 'center',
-          fontSize: hotspot.icon === 'UV' ? 11 : 17,
+          fontSize: compact ? (hotspot.icon === 'UV' ? 10 : 15) : hotspot.icon === 'UV' ? 11 : 17,
           fontWeight: 800,
           boxShadow: active
             ? `0 0 0 8px ${hotspot.tone}22, 0 12px 24px rgba(15,23,42,0.18)`
@@ -1619,12 +1651,12 @@ const MapHotspot = ({
               horizontalAnchor === 'left'
                 ? 0
                 : horizontalAnchor === 'right'
-                  ? 38
-                  : 19,
-            width: 268,
-            maxHeight: 250,
+                  ? compact ? 34 : 38
+                  : compact ? 17 : 19,
+            width: compact ? 236 : 268,
+            maxHeight: compact ? 220 : 250,
             overflowY: 'auto',
-            padding: 13,
+            padding: compact ? 11 : 13,
             borderRadius: 18,
             border: `1px solid ${hotspot.tone}66`,
             background: 'rgba(255,255,255,0.96)',
@@ -1638,14 +1670,14 @@ const MapHotspot = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 8 }}>
             <div
               style={{
-                width: 28,
-                height: 28,
+                width: compact ? 24 : 28,
+                height: compact ? 24 : 28,
                 borderRadius: 999,
                 background: hotspot.tone,
                 color: '#fff',
                 display: 'grid',
                 placeItems: 'center',
-                fontSize: hotspot.icon === 'UV' ? 9 : 14,
+                fontSize: compact ? (hotspot.icon === 'UV' ? 8 : 12) : hotspot.icon === 'UV' ? 9 : 14,
                 fontWeight: 800,
                 flexShrink: 0,
               }}
@@ -1653,12 +1685,12 @@ const MapHotspot = ({
               {hotspot.icon}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <div style={{ fontSize: 14, fontWeight: 800 }}>{hotspot.title}</div>
+              <div style={{ fontSize: compact ? 13 : 14, fontWeight: 800 }}>{hotspot.title}</div>
               <div style={{ fontSize: 11, color: hotspot.tone, fontWeight: 700 }}>{hotspot.metric}</div>
             </div>
           </div>
 
-          <div style={{ color: '#334155', fontSize: 11, lineHeight: 1.55 }}>{hotspot.summary}</div>
+          <div style={{ color: '#334155', fontSize: compact ? 10.5 : 11, lineHeight: 1.55 }}>{hotspot.summary}</div>
 
           <div
             style={{
@@ -1733,18 +1765,22 @@ const MetricBadge = ({
   label,
   value,
   sublabel,
+  compact,
+  minWidth,
   style,
 }: {
   label: string;
   value: string;
   sublabel: string;
+  compact: boolean;
+  minWidth: number;
   style: React.CSSProperties;
 }) => (
   <div
     style={{
       position: 'absolute',
-      minWidth: 170,
-      padding: '14px 16px',
+      minWidth,
+      padding: compact ? '10px 12px' : '14px 16px',
       borderRadius: 18,
       background: 'rgba(255,255,255,0.74)',
       border: '1px solid rgba(148,163,184,0.48)',
@@ -1756,8 +1792,8 @@ const MetricBadge = ({
     <div style={{ fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
       {label}
     </div>
-    <div style={{ fontSize: 24, fontWeight: 800, color: '#0f172a', marginTop: 4 }}>{value}</div>
-    <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{sublabel}</div>
+    <div style={{ fontSize: compact ? 18 : 24, fontWeight: 800, color: '#0f172a', marginTop: 4 }}>{value}</div>
+    <div style={{ fontSize: compact ? 11 : 12, color: '#64748b', marginTop: 2 }}>{sublabel}</div>
   </div>
 );
 

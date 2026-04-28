@@ -13,7 +13,15 @@ const Dashboard: React.FC = () => {
   const isGeoOnly = totalGeoPlanes > 0 && !Object.values(sustainMix).some(v => v);
 
   return (
-    <div className="flex flex-col gap-4 p-4 text-white font-sans w-full max-w-sm">
+    <div className="flex flex-col gap-4 p-5 text-white font-sans w-full">
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-semibold text-cyan-400 uppercase tracking-widest">
+          Secondary Dashboard
+        </span>
+        <p className="text-sm text-gray-400">
+          Economic, health, and biosphere indicators that complement the live map.
+        </p>
+      </div>
 
       {/* Warning Panels */}
       {isGeoOnly && (

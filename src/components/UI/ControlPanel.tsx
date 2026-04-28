@@ -133,18 +133,19 @@ const geoSources: SourceLink[] = [
 ];
 
 const controlShell: React.CSSProperties = {
-  width: 320,
+  width: '100%',
+  minWidth: 0,
   display: 'flex',
   flexDirection: 'column',
   gap: 24,
   padding: 24,
   color: '#f8fafc',
   background:
-    'linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(2,6,23,0.98) 100%)',
-  border: '1px solid rgba(71,85,105,0.45)',
-  borderRadius: 20,
-  boxShadow: '0 24px 60px rgba(2,6,23,0.35)',
-  maxHeight: '90vh',
+    'linear-gradient(180deg, rgba(8,15,28,0.97) 0%, rgba(2,6,23,0.98) 54%, rgba(8,47,73,0.9) 100%)',
+  border: '1px solid rgba(94,234,212,0.18)',
+  borderRadius: 24,
+  boxShadow: '0 28px 60px rgba(2,6,23,0.38)',
+  maxHeight: 'unset',
   overflowY: 'auto',
 };
 

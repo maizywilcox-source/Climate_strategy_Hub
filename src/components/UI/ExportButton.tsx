@@ -60,16 +60,54 @@ const ExportButton: React.FC = () => {
   };
 
   return (
-    <button
-      onClick={handleExport}
-      disabled={isExporting}
-      className={`flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg font-semibold transition-all shadow-lg ${
-        isExporting ? 'bg-indigo-800 text-indigo-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500 text-white hover:scale-[1.02]'
-      }`}
-    >
-      {isExporting ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
-      {isExporting ? 'Generating PDF...' : 'Export Policy Brief'}
-    </button>
+    <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <span
+          style={{
+            color: '#67e8f9',
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Presentation Output
+        </span>
+        <p style={{ color: '#94a3b8', fontSize: 13, lineHeight: 1.6 }}>
+          Capture the current scenario as a quick policy-style takeaway for class review
+          or portfolio presentation.
+        </p>
+      </div>
+
+      <button
+        onClick={handleExport}
+        disabled={isExporting}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 10,
+          width: '100%',
+          padding: '14px 18px',
+          borderRadius: 18,
+          fontWeight: 800,
+          letterSpacing: '0.04em',
+          color: isExporting ? '#a5b4fc' : '#ecfeff',
+          background: isExporting
+            ? 'linear-gradient(135deg, rgba(49,46,129,0.9) 0%, rgba(30,41,59,0.95) 100%)'
+            : 'linear-gradient(135deg, rgba(6,182,212,0.92) 0%, rgba(59,130,246,0.92) 52%, rgba(16,185,129,0.88) 100%)',
+          boxShadow: isExporting
+            ? '0 16px 32px rgba(30,41,59,0.28)'
+            : '0 18px 36px rgba(14, 116, 144, 0.3)',
+          transition: 'transform 180ms ease, box-shadow 180ms ease, filter 180ms ease',
+          cursor: isExporting ? 'not-allowed' : 'pointer',
+          filter: isExporting ? 'saturate(0.8)' : 'saturate(1)',
+        }}
+      >
+        {isExporting ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
+        {isExporting ? 'Generating PDF...' : 'Export Policy Brief'}
+      </button>
+    </div>
   );
 };
 
